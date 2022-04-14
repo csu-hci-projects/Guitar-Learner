@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -15,7 +15,7 @@ const ReadyScreen = () => {
     <View style={styles.container}>
       <Text style={{ fontWeight: 'bold' }}>This is a fretboard map.</Text>
       <Image source={fretboard} style={styles.fretboardImage}/>
-      <Text>Ready to start learning?</Text>
+      <Text style={{ marginBottom: 50 }}>Ready to start learning?</Text>
 
       <Button
         color="#841584"
