@@ -1,67 +1,143 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-
-const ReadyScreen = () => {
-
-  const nav = useNavigation();
-
-  return (
-    <View style={styles.container}>
-      <Text style={{ fontWeight: 'bold' }}>This is a fretboard map.</Text>
-      <Image source={fretboard} style={styles.fretboardImage}/>
-      <Text style={{ marginBottom: 50 }}>Ready to start learning?</Text>
-
-      <Button
-        color="#841584"
-        title="Begin quizzing"
-        onPress={() => nav.navigate('Study')}
-      />
-
-      <StatusBar style="auto" />
-    </View>
-  );
-};
-
-const StudyScreen = () => (
-  <View style={styles.container}>
-    <Text>Study Here</Text>
-    <Image source={favicon}/>
-  </View>
-);
-
-const DocumentationScreen = () => (
-  <View style={styles.container}>
-    <Text>There will be Documentation here.</Text>
-  </View>
-);
-
-const fretboard = require('./assets/fretboard.png');
-const favicon = require('./assets/favicon.png');
-const Tab = createBottomTabNavigator();
-
-export const AppNavigator = () => {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="First" component={ReadyScreen}/>
-        <Tab.Screen name="Study" component={StudyScreen}/>
-        <Tab.Screen name="Documentation" component={DocumentationScreen}/>
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
+import { createStackNavigator } from '@react-navigation/stack';
+import FlipCard from 'react-native-flip-card';
+import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons'; 
 
 export default function App() {
   return (
     <AppNavigator />
   );
 }
+
+const fretboard = require('./assets/fretboard.png');
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+export const AppNavigator = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
+          component={ReadyScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="home" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Flashcards"
+          component={FlashcardScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <SimpleLineIcons name="book-open" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Documentation"
+          component={DocumentationScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="md-document-text-outline" size={24} color="black" />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+const ReadyScreen = () => {
+  const nav = useNavigation();
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcomeText}>Ready to start learning the guitar?</Text>
+      <Button
+        color="#841584"
+        title="Begin quiz"
+        onPress={() => nav.navigate('Flashcards')}
+      />
+      <StatusBar style="auto" />
+    </View>
+  );
+};
+
+const FlashcardScreen = () => {
+
+  const nav = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      <Image source={fretboard} style={styles.fretboardImage}/>
+      {/* <Button
+          style={{ top: 0 }}
+          title="Begin"
+          onPress={() => nav.navigate("StudyScreen")}
+      /> */}
+      <TouchableOpacity
+          onPress={() => {
+            console.log("hi");
+          }}
+          style={styles.highlightA}>
+        </TouchableOpacity>
+        <FlipCard
+          perspective={1000}
+          style={styles.flashcard}
+          flipHorizontal={true}
+          flipVertical={false}
+        >
+          <View>
+            <Text style={{ textAlign:'center' }}>What note is behind the blue highlight?</Text>
+          </View>
+          <View>
+            <Text style={{ textAlign:'center', fontWeight: 'bold' }}>A</Text>
+            <Text></Text>
+            <Text style={{ textAlign: 'center' }}>Keep it up, you've got it!</Text>
+          </View>
+        </FlipCard>
+    </View>
+  );
+};
+
+// const StudyScreen = () => {
+//   return (
+//     <View style={styles.container}>
+//         <Image source={fretboard} style={styles.fretboardImage}/>
+//         <TouchableOpacity
+//           onPress={() => {
+//             console.log("hi");
+//           }}
+//           style={styles.highlightA}>
+//         </TouchableOpacity>
+//         <FlipCard
+//           perspective={1000}
+//           style={styles.flashcard}
+//           flipHorizontal={true}
+//           flipVertical={false}
+//         >
+//           <View>
+//             <Text style={{ textAlign:'center' }}>What note is behind the blue highlight?</Text>
+//           </View>
+//           <View>
+//             <Text style={{ textAlign:'center' }}>A</Text>
+//           </View>
+//         </FlipCard>
+//       </View>
+//   );
+// };
+
+const DocumentationScreen = () => (
+  <View style={styles.container}>
+    <Text>There will be Documentation here.</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -72,18 +148,52 @@ const styles = StyleSheet.create({
     fontSize: 24
   },
 
+  welcomeText: {
+    fontWeight: 'bold', 
+    fontSize: 38, 
+    marginBottom: 50,
+    textAlign: 'center'
+  },
+
   fretboardImage: {
-    width: 300,
-    height: 100,
-    // transform: [{ rotate: '90deg'}],
+    width: '128%',
+    height: '20%',
+    transform: [{ rotate: '90deg'}],
     justifyContent: 'center',
     marginTop: 8,
+    position: 'absolute'
   },
 
   beginStudyButton: {
-    width: 100,
-    height:100,
+    position: 'absolute',
+    bottom: 0
+  },
+
+  highlightA: {
+    width: 5,
+    height: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
     backgroundColor: 'aqua',
-    borderColor: 'coral'
+    top: 168,
+    left: 13,
+    shadowColor: 'rgba(0, 0, 0, .4)',
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1
+  },
+
+  flashcard: {
+    width: 100,
+    height: 65,
+    bottom: 400,
+    right: 70,
+    textAlign: 'center',
+    shadowColor: 'rgba(0, 0, 0, .4)',
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    backgroundColor: '#F7E2E2',
+    position: 'absolute'
   }
 });
