@@ -73,7 +73,12 @@ const ReadyScreen = () => {
 const FlashcardScreen = () => {
 
   const nav = useNavigation();
-  
+
+  const handleButtonClick = (props) => {
+    console.log("hi " + props);
+    console.log("result of Randomize():");
+    console.log(Randomize(props));
+  }
 
   return (
     <View style={styles.container}>
@@ -86,6 +91,7 @@ const FlashcardScreen = () => {
       <TouchableOpacity
           onPress={() => {
             console.log("hi");
+            Randomize(1);
           }}
           style={styles.highlightA}>
         </TouchableOpacity>
@@ -106,7 +112,7 @@ const FlashcardScreen = () => {
         </FlipCard>
         <Button
           title="Next"
-          onPress={Randomize(1)}
+          onPress={ () => handleButtonClick(1)}
         />
     </View>
   );

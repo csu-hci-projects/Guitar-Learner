@@ -4,12 +4,12 @@ import { Button } from 'react-native-elements';
 
 
 export default function Randomize(props) {
-    return (
-        console.log(props)
-    );
+    let randomNum = Math.floor(Math.random() * 10) + 1;
+    while (randomNum === props) {
+        console.log("Random number: ");
+        console.log(randomNum);
+        randomNum = Math.floor(Math.random() * 10) + 1;
+    }
+    console.log(randomNum);
+    return randomNum;
 }
-
-// generateRandomNumber = (props) => {
-//     // props will be the number we don't want it to be. If someone just studied A (1), we will make sure the result is not 1.
-
-// }
