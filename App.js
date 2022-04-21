@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import FlipCard from 'react-native-flip-card';
 import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons'; 
+import Randomize from './Randomize';
 
 export default function App() {
   return (
@@ -73,6 +74,12 @@ const FlashcardScreen = () => {
 
   const nav = useNavigation();
 
+  const handleButtonClick = (props) => {
+    console.log("hi " + props);
+    console.log("result of Randomize():");
+    console.log(Randomize(props));
+  }
+
   return (
     <View style={styles.container}>
       <Image source={fretboard} style={styles.fretboardImage}/>
@@ -84,6 +91,7 @@ const FlashcardScreen = () => {
       <TouchableOpacity
           onPress={() => {
             console.log("hi");
+            Randomize(1);
           }}
           style={styles.highlightA}>
         </TouchableOpacity>
@@ -102,6 +110,10 @@ const FlashcardScreen = () => {
             <Text style={{ textAlign: 'center' }}>Keep it up, you've got it!</Text>
           </View>
         </FlipCard>
+        <Button
+          title="Next"
+          onPress={ () => handleButtonClick(1)}
+        />
     </View>
   );
 };
