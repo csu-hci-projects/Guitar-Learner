@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
 import { Button } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FlipCard from 'react-native-flip-card';
+// import FlipCard from 'react-native-flip-card';
 import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons'; 
 import { useState } from 'react';
 import Randomize from './Randomize';
 import Encourage from './Encourage';
-import { render } from 'react-dom';
+import Flashcard from './Flashcard';
 
 export default function App() {
   return (
@@ -81,14 +81,6 @@ const FlashcardTemplateScreen = () => {
 
     const encouragingMessage = Encourage(message);
     setMessage(encouragingMessage);
-
-    resetFlashcard();
-  }
-
-  const resetFlashcard = () => {
-    return (
-      <FrontSide />
-    );
   }
 
   const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
@@ -123,53 +115,6 @@ const FlashcardScreen = (props) => {
   );
 };
 
-function Flashcard(props) {
-    return (
-      <FlipCard
-        perspective={1000}
-        style={styles.flashcard}
-        flipHorizontal={true}
-        flipVertical={false}
-        onFlipEnd={(isFlipEnd) => {console.log('isFlipEnd', isFlipEnd)}}
-        flip={true}
-      >
-        <FrontSide />
-        <BackSide 
-          note={props.note}
-          message={props.message}
-        />
-      </FlipCard>
-    );
-}
-
-const FrontSide = () => {
-  return (
-    <View>
-        <Text style={styles.flashcardText}>What note is behind the blue highlight?</Text>
-    </View>
-  );
-}
-
-const BackSide = (props) => {
-  let note = props.note;
-  switch (note) {
-    case "C1":
-      note = "C";
-      break;
-    case "D1":
-      note = "D";
-      break;
-    case "E1":
-      note = "E";
-      break;
-  }
-  return (
-    <View>
-        <Text style={styles.flashcardText}>{note}</Text>
-        <Text style={styles.flashcardText}>{props.message}</Text>
-      </View>
-  );
-}
 
 const DocumentationScreen = () => (
   <View style={styles.container}>
@@ -196,6 +141,7 @@ const styles = StyleSheet.create({
   fretboardImage: {
     width: '130%',
     height: '25%',
+    right: 10,
     transform: [{ rotate: '90deg'}],
     justifyContent: 'center',
     marginTop: 8,
@@ -205,24 +151,6 @@ const styles = StyleSheet.create({
   beginStudyButton: {
     position: 'absolute',
     bottom: 0
-  },
-
-  flashcard: {
-    width: 105,
-    height: 100,
-    bottom: 400,
-    right: 70,
-    shadowColor: 'rgba(0, 0, 0, .4)',
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
-    backgroundColor: '#F7E2E2',
-    position: 'absolute'
-  },
-
-  flashcardText: {
-    textAlign: 'center',
-    alignItems: 'center',
-    marginTop: 10
   },
 
   highlightNote: (note) => { 
