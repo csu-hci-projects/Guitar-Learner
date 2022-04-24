@@ -4,12 +4,10 @@ import { Button } from 'react-native-elements';
 
 
 export default function Randomize(props) {
-    let randomNum = Math.floor(Math.random() * 10) + 1;
+    let randomNum = Math.floor(Math.random() * 10);
+    const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
     while (randomNum === props) {
-        console.log("Random number: ");
-        console.log(randomNum);
-        randomNum = Math.floor(Math.random() * 10) + 1;
+        randomNum = Math.floor(Math.random() * 10);
     }
-    console.log(randomNum);
-    return randomNum;
+    return notes[randomNum];
 }
