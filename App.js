@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ProgressBarAndroidComponent } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,7 +8,8 @@ import FlipCard from 'react-native-flip-card';
 import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons'; 
 import { useState } from 'react';
 import Randomize from './Randomize';
-import { highlightA, highlightC } from './NoteStyles';
+import Encourage from './Encourage';
+import { render } from 'react-dom';
 
 export default function App() {
   return (
@@ -71,15 +72,23 @@ const ReadyScreen = () => {
 };
 
 const FlashcardTemplateScreen = () => {
-  const nav = useNavigation();
   const [studyNote, setStudyNote] = useState('A');
-  const [noteStyle, setNoteStyle] = useState("highlightA");
+  const [message, setMessage] = useState("Keep it up, you're doing great!");
 
   const handleButtonClick = (props) => {
     const randomNextNote = Randomize(props);
     setStudyNote(randomNextNote);
-    let noteStyleString = `highlight${randomNextNote}`;
-    setNoteStyle(noteStyleString);
+
+    const encouragingMessage = Encourage(message);
+    setMessage(encouragingMessage);
+
+    resetFlashcard();
+  }
+
+  const resetFlashcard = () => {
+    return (
+      <FrontSide />
+    );
   }
 
   const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
@@ -89,7 +98,7 @@ const FlashcardTemplateScreen = () => {
     <>
       <FlashcardScreen
         note={studyNote}
-        style={noteStyle}
+        message={message}
       />
       <Button
           title="Next"
@@ -100,40 +109,67 @@ const FlashcardTemplateScreen = () => {
 }
 
 const FlashcardScreen = (props) => {
-
-  console.log(props);
-
   return (
     <View style={styles.container}>
       <Image source={fretboard} style={styles.fretboardImage}/>
       <TouchableOpacity
-          style={highlightA()}>
+          style={styles.highlightNote(props.note)}>
       </TouchableOpacity>
-      <Flashcard note={props.note} />
+      <Flashcard
+        note={props.note}
+        message={props.message}
+      />
     </View>
   );
 };
 
 function Flashcard(props) {
+    return (
+      <FlipCard
+        perspective={1000}
+        style={styles.flashcard}
+        flipHorizontal={true}
+        flipVertical={false}
+        onFlipEnd={(isFlipEnd) => {console.log('isFlipEnd', isFlipEnd)}}
+        flip={true}
+      >
+        <FrontSide />
+        <BackSide 
+          note={props.note}
+          message={props.message}
+        />
+      </FlipCard>
+    );
+}
+
+const FrontSide = () => {
   return (
-    <FlipCard
-      perspective={1000}
-      style={styles.flashcard}
-      flipHorizontal={true}
-      flipVertical={false}
-    >
-      <View>
-        <Text style={{ textAlign:'center' }}>What note is behind the blue highlight?</Text>
-      </View>
-      <View>
-        <Text style={{ textAlign:'center', fontWeight: 'bold' }}>{props.note}</Text>
-        <Text></Text>
-        <Text style={{ textAlign: 'center' }}>Keep it up, you've got it!</Text>
-      </View>
-    </FlipCard>
+    <View>
+        <Text style={styles.flashcardText}>What note is behind the blue highlight?</Text>
+    </View>
   );
 }
 
+const BackSide = (props) => {
+  let note = props.note;
+  switch (note) {
+    case "C1":
+      note = "C";
+      break;
+    case "D1":
+      note = "D";
+      break;
+    case "E1":
+      note = "E";
+      break;
+  }
+  return (
+    <View>
+        <Text style={styles.flashcardText}>{note}</Text>
+        <Text style={styles.flashcardText}>{props.message}</Text>
+      </View>
+  );
+}
 
 const DocumentationScreen = () => (
   <View style={styles.container}>
@@ -172,11 +208,10 @@ const styles = StyleSheet.create({
   },
 
   flashcard: {
-    width: 100,
-    height: 65,
+    width: 105,
+    height: 100,
     bottom: 400,
     right: 70,
-    textAlign: 'center',
     shadowColor: 'rgba(0, 0, 0, .4)',
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
@@ -184,33 +219,70 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
 
-  highlightC: {
-    width: 5,
-    height: 5,
-    justifyContent: 'center',
+  flashcardText: {
+    textAlign: 'center',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    backgroundColor: 'aqua',
-    top: 182,
-    left: -28,
-    shadowColor: 'rgba(0, 0, 0, .4)',
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1
+    marginTop: 10
   },
 
-  highlightA: {
-    width: 5,
-    height: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 100,
-    backgroundColor: 'aqua',
-    top: 149,
-    left: 15,
-    shadowColor: 'rgba(0, 0, 0, .4)',
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1
+  highlightNote: (note) => { 
+    let noteTop;
+    let noteLeft;
+    switch (note) {
+      case "C":
+        noteTop = 183;
+        noteLeft = -28;
+        break;
+      case "D":
+        noteTop = 183;
+        noteLeft = 35;
+        break;
+      case "E":
+        noteTop = 148;
+        noteLeft = -7;
+        break;
+      case "F":
+        noteTop = 114;
+        noteLeft = -49;
+        break;
+      case "G":
+        noteTop = 183;
+        noteLeft = -49;
+        break;
+      case "A":
+        noteTop = 148;
+        noteLeft = 15;
+        break;
+      case "B":
+        noteTop = 148;
+        noteLeft = -28;
+        break;
+      case "C1":
+        noteTop = 114;
+        noteLeft = 35;
+        break;
+      case "D1":
+        noteTop = 250;
+        noteLeft = -28;
+      case "E1":
+        noteTop = 250;
+        noteLeft = 35;
+        break;
+    }
+
+    return {
+      width: 5,
+      height: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 100,
+      backgroundColor: 'aqua',
+      top: noteTop,
+      left: noteLeft,
+      shadowColor: 'rgba(0, 0, 0, .4)',
+      shadowOffset: { height: 1, width: 1 },
+      shadowOpacity: 1
+    }
   }
 });
