@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
 import { Button } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,7 +9,7 @@ import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import Randomize from './Randomize';
 import Encourage from './Encourage';
-import { render } from 'react-dom';
+// import Flashcard from './Flashcard';
 
 export default function App() {
   return (
@@ -74,6 +74,7 @@ const ReadyScreen = () => {
 const FlashcardTemplateScreen = () => {
   const [studyNote, setStudyNote] = useState('A');
   const [message, setMessage] = useState("Keep it up, you're doing great!");
+  // const [flashcardSide, setFlashcardSide] = useState("front");
 
   const handleButtonClick = (props) => {
     const randomNextNote = Randomize(props);
@@ -81,14 +82,6 @@ const FlashcardTemplateScreen = () => {
 
     const encouragingMessage = Encourage(message);
     setMessage(encouragingMessage);
-
-    resetFlashcard();
-  }
-
-  const resetFlashcard = () => {
-    return (
-      <FrontSide />
-    );
   }
 
   const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
@@ -124,22 +117,20 @@ const FlashcardScreen = (props) => {
 };
 
 function Flashcard(props) {
-    return (
-      <FlipCard
-        perspective={1000}
-        style={styles.flashcard}
-        flipHorizontal={true}
-        flipVertical={false}
-        onFlipEnd={(isFlipEnd) => {console.log('isFlipEnd', isFlipEnd)}}
-        flip={true}
-      >
-        <FrontSide />
-        <BackSide 
-          note={props.note}
-          message={props.message}
-        />
-      </FlipCard>
-    );
+  return (
+    <FlipCard
+      perspective={1000}
+      style={styles.flashcard}
+      flipHorizontal={true}
+      flipVertical={false}
+    >
+      <FrontSide />
+      <BackSide 
+        note={props.note}
+        message={props.message}
+      />
+    </FlipCard>
+  );
 }
 
 const FrontSide = () => {
@@ -196,6 +187,7 @@ const styles = StyleSheet.create({
   fretboardImage: {
     width: '130%',
     height: '25%',
+    right: 10,
     transform: [{ rotate: '90deg'}],
     justifyContent: 'center',
     marginTop: 8,
@@ -210,8 +202,8 @@ const styles = StyleSheet.create({
   flashcard: {
     width: 105,
     height: 100,
-    bottom: 400,
-    right: 70,
+    top: 250,
+    left: 35,
     shadowColor: 'rgba(0, 0, 0, .4)',
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
@@ -231,42 +223,43 @@ const styles = StyleSheet.create({
     switch (note) {
       case "C":
         noteTop = 183;
-        noteLeft = -28;
+        noteLeft = -94;
         break;
       case "D":
         noteTop = 183;
-        noteLeft = 35;
+        noteLeft = -9;
         break;
       case "E":
         noteTop = 148;
-        noteLeft = -7;
+        noteLeft = -73;
         break;
       case "F":
-        noteTop = 114;
-        noteLeft = -49;
+        noteTop = 115;
+        noteLeft = -115;
         break;
       case "G":
         noteTop = 183;
-        noteLeft = -49;
+        noteLeft = -115;
         break;
       case "A":
         noteTop = 148;
-        noteLeft = 15;
+        noteLeft = -52;
         break;
       case "B":
         noteTop = 148;
-        noteLeft = -28;
+        noteLeft = -94;
         break;
       case "C1":
-        noteTop = 114;
-        noteLeft = 35;
+        noteTop = 115;
+        noteLeft = -9;
         break;
       case "D1":
-        noteTop = 250;
-        noteLeft = -28;
+        noteTop = 251;
+        noteLeft = -94;
+        break;
       case "E1":
-        noteTop = 250;
-        noteLeft = 35;
+        noteTop = 251;
+        noteLeft = -31;
         break;
     }
 
