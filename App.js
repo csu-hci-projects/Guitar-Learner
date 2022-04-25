@@ -4,12 +4,12 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react
 import { Button } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import FlipCard from 'react-native-flip-card';
+import FlipCard from 'react-native-flip-card';
 import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons'; 
 import { useState } from 'react';
 import Randomize from './Randomize';
 import Encourage from './Encourage';
-import Flashcard from './Flashcard';
+// import Flashcard from './Flashcard';
 
 export default function App() {
   return (
@@ -74,7 +74,7 @@ const ReadyScreen = () => {
 const FlashcardTemplateScreen = () => {
   const [studyNote, setStudyNote] = useState('A');
   const [message, setMessage] = useState("Keep it up, you're doing great!");
-  const [flashcardSide, setFlashcardSide] = useState("front");
+  // const [flashcardSide, setFlashcardSide] = useState("front");
 
   const handleButtonClick = (props) => {
     const randomNextNote = Randomize(props);
@@ -82,8 +82,6 @@ const FlashcardTemplateScreen = () => {
 
     const encouragingMessage = Encourage(message);
     setMessage(encouragingMessage);
-
-    setFlashcardSide("front");
   }
 
   const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
@@ -94,7 +92,6 @@ const FlashcardTemplateScreen = () => {
       <FlashcardScreen
         note={studyNote}
         message={message}
-        side={flashcardSide}
       />
       <Button
           title="Next"
@@ -114,12 +111,56 @@ const FlashcardScreen = (props) => {
       <Flashcard
         note={props.note}
         message={props.message}
-        side={props.side}
       />
     </View>
   );
 };
 
+function Flashcard(props) {
+  return (
+    <FlipCard
+      perspective={1000}
+      style={styles.flashcard}
+      flipHorizontal={true}
+      flipVertical={false}
+    >
+      <FrontSide />
+      <BackSide 
+        note={props.note}
+        message={props.message}
+      />
+    </FlipCard>
+  );
+}
+
+const FrontSide = () => {
+  return (
+    <View>
+        <Text style={styles.flashcardText}>What note is behind the blue highlight?</Text>
+    </View>
+  );
+}
+
+const BackSide = (props) => {
+  let note = props.note;
+  switch (note) {
+    case "C1":
+      note = "C";
+      break;
+    case "D1":
+      note = "D";
+      break;
+    case "E1":
+      note = "E";
+      break;
+  }
+  return (
+    <View>
+        <Text style={styles.flashcardText}>{note}</Text>
+        <Text style={styles.flashcardText}>{props.message}</Text>
+      </View>
+  );
+}
 
 const DocumentationScreen = () => (
   <View style={styles.container}>
@@ -158,23 +199,23 @@ const styles = StyleSheet.create({
     bottom: 0
   },
 
-  // flashcard: {
-  //   width: 105,
-  //   height: 100,
-  //   top: 250,
-  //   right: 47,
-  //   shadowColor: 'rgba(0, 0, 0, .4)',
-  //   shadowOffset: { height: 1, width: 1 },
-  //   shadowOpacity: 1,
-  //   backgroundColor: '#F7E2E2',
-  //   position: 'absolute'
-  // },
+  flashcard: {
+    width: 105,
+    height: 100,
+    top: 250,
+    left: 35,
+    shadowColor: 'rgba(0, 0, 0, .4)',
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    backgroundColor: '#F7E2E2',
+    position: 'absolute'
+  },
 
-  // flashcardText: {
-  //   textAlign: 'center',
-  //   alignItems: 'center',
-  //   marginTop: 10
-  // },
+  flashcardText: {
+    textAlign: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
 
   highlightNote: (note) => { 
     let noteTop;
@@ -182,42 +223,43 @@ const styles = StyleSheet.create({
     switch (note) {
       case "C":
         noteTop = 183;
-        noteLeft = -28;
+        noteLeft = -94;
         break;
       case "D":
         noteTop = 183;
-        noteLeft = 35;
+        noteLeft = -9;
         break;
       case "E":
         noteTop = 148;
-        noteLeft = -7;
+        noteLeft = -73;
         break;
       case "F":
-        noteTop = 114;
-        noteLeft = -49;
+        noteTop = 115;
+        noteLeft = -115;
         break;
       case "G":
         noteTop = 183;
-        noteLeft = -49;
+        noteLeft = -115;
         break;
       case "A":
         noteTop = 148;
-        noteLeft = 15;
+        noteLeft = -52;
         break;
       case "B":
         noteTop = 148;
-        noteLeft = -28;
+        noteLeft = -94;
         break;
       case "C1":
-        noteTop = 114;
-        noteLeft = 35;
+        noteTop = 115;
+        noteLeft = -9;
         break;
       case "D1":
-        noteTop = 250;
-        noteLeft = -28;
+        noteTop = 251;
+        noteLeft = -94;
+        break;
       case "E1":
-        noteTop = 250;
-        noteLeft = 35;
+        noteTop = 251;
+        noteLeft = -31;
         break;
     }
 
