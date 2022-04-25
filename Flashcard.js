@@ -1,48 +1,44 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { useState } from 'react';
 
- 
 export default function Flashcard(props) {
     const [cardText, setCardText] = useState("What note is behind the blue highlight?");
     const [cardState, setCardState] = useState("front");
 
     const handleFrontTap = (props) => {
-        
+        if (cardState === "front") {
+            let note = props.note;
+            switch (note) {
+                case "C1":
+                note = "C";
+                break;
+                case "D1":
+                note = "D";
+                break;
+                case "E1":
+                note = "E";
+                break;
+            }
+            setCardText(`${note}\n\n${props.message}`);
+            setCardState("back");
+        }
+        else {
+            setCardText("What note is behind the blue highlight?");
+            setCardState("front");
+        }
     }
 
     return (
-        <>
-            <TouchableOpacity 
-                style={styles.flashcard}
-                onPress={ () => handleFrontTap(props)}
-            >
-                <Text style={styles.flashcardText}>{cardText}</Text>
-            </TouchableOpacity>
-        </>
-        );
-}
-
-const BackSide = (props) => {
-    let note = props.note;
-    switch (note) {
-        case "C1":
-        note = "C";
-        break;
-        case "D1":
-        note = "D";
-        break;
-        case "E1":
-        note = "E";
-        break;
-    }
-    return (
-        <View style={styles.flashcard}>
-            <Text style={styles.flashcardText}>{note}</Text>
-            <Text style={styles.flashcardText}>{props.message}</Text>
-        </View>
+        <TouchableOpacity 
+            style={styles.flashcard}
+            onPress={ () => handleFrontTap(props)}
+        >
+            <Text style={styles.flashcardText}>{cardText}</Text>
+        </TouchableOpacity>
     );
 }
+
 
 
 

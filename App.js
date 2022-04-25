@@ -74,6 +74,7 @@ const ReadyScreen = () => {
 const FlashcardTemplateScreen = () => {
   const [studyNote, setStudyNote] = useState('A');
   const [message, setMessage] = useState("Keep it up, you're doing great!");
+  const [flashcardSide, setFlashcardSide] = useState("front");
 
   const handleButtonClick = (props) => {
     const randomNextNote = Randomize(props);
@@ -81,6 +82,8 @@ const FlashcardTemplateScreen = () => {
 
     const encouragingMessage = Encourage(message);
     setMessage(encouragingMessage);
+
+    setFlashcardSide("front");
   }
 
   const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C1', 'D1', 'E1'];
@@ -91,6 +94,7 @@ const FlashcardTemplateScreen = () => {
       <FlashcardScreen
         note={studyNote}
         message={message}
+        side={flashcardSide}
       />
       <Button
           title="Next"
@@ -110,6 +114,7 @@ const FlashcardScreen = (props) => {
       <Flashcard
         note={props.note}
         message={props.message}
+        side={props.side}
       />
     </View>
   );
@@ -152,6 +157,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0
   },
+
+  // flashcard: {
+  //   width: 105,
+  //   height: 100,
+  //   top: 250,
+  //   right: 47,
+  //   shadowColor: 'rgba(0, 0, 0, .4)',
+  //   shadowOffset: { height: 1, width: 1 },
+  //   shadowOpacity: 1,
+  //   backgroundColor: '#F7E2E2',
+  //   position: 'absolute'
+  // },
+
+  // flashcardText: {
+  //   textAlign: 'center',
+  //   alignItems: 'center',
+  //   marginTop: 10
+  // },
 
   highlightNote: (note) => { 
     let noteTop;
