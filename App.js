@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native';
 import { Button } from 'react-native-elements';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -164,7 +164,7 @@ const BackSide = (props) => {
 
 const DocumentationScreen = () => (
   <View style={styles.container}>
-    <Text>There will be Documentation here.</Text>
+    
   </View>
 );
 
