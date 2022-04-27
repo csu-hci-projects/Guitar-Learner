@@ -9,7 +9,6 @@ import { AntDesign, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import Randomize from './Randomize';
 import Encourage from './Encourage';
-// import Flashcard from './Flashcard';
 
 export default function App() {
   return (
@@ -18,6 +17,8 @@ export default function App() {
 }
 
 const fretboard = require('./assets/fretboard.png');
+const scale = require('./assets/cscale.png');
+const gscale = require('./assets/gscale.png');
 const Tab = createBottomTabNavigator();
 
 export const AppNavigator = () => {
@@ -74,7 +75,6 @@ const ReadyScreen = () => {
 const FlashcardTemplateScreen = () => {
   const [studyNote, setStudyNote] = useState('A');
   const [message, setMessage] = useState("Keep it up, you're doing great!");
-  // const [flashcardSide, setFlashcardSide] = useState("front");
 
   const handleButtonClick = (props) => {
     const randomNextNote = Randomize(props);
@@ -164,7 +164,13 @@ const BackSide = (props) => {
 
 const DocumentationScreen = () => (
   <View style={styles.container}>
-    
+    <Text>C Scale:</Text>
+    <Image source={scale} style={styles.scale}/>
+    <Text>
+
+    </Text>
+    <Text>G Scale:</Text>
+    <Image source={gscale} style={styles.scale}/>
   </View>
 );
 
@@ -227,7 +233,7 @@ const styles = StyleSheet.create({
         break;
       case "D":
         noteTop = 183;
-        noteLeft = -9;
+        noteLeft = -31;
         break;
       case "E":
         noteTop = 148;
@@ -251,7 +257,7 @@ const styles = StyleSheet.create({
         break;
       case "C1":
         noteTop = 115;
-        noteLeft = -9;
+        noteLeft = -31;
         break;
       case "D1":
         noteTop = 251;
@@ -277,5 +283,10 @@ const styles = StyleSheet.create({
       shadowOffset: { height: 1, width: 1 },
       shadowOpacity: 1
     }
+  },
+
+  scale: {
+    width: 300,
+    height: 100
   }
 });
